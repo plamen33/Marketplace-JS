@@ -1,0 +1,44 @@
+<!--postDetails is set in the postView.js-->
+{{#postDetails}}
+<div class="post-details">
+    <article id="post">
+        <h3 class="title">{{title}}</h3>
+        <p class="subtitle">Created on {{date}} by {{author}}</p>
+        <p class="content">{{content}}</p>
+    </article>
+    <br>
+    <img class="image" src="{{image}}" style="border-radius: 10px" alt=" " width="400" height="300">
+    <br>  <br>
+    <ul class="border">
+        <li><b>Phone:</b> {{phone}}</li>
+        <li>Email:</b> {{email}}</li>
+        <li>Tag</b>: {{tag}}</li>
+        <li>Price</b>: {{price}}</li>
+    </ul>
+    <br><br>
+    <div style="float:left; margin-left: 10%; ">
+        <a href="#/edit/post/?id={{_id}}" class="actionbtn2">Edit Sale</a>
+    </div>
+    <div style="float:left; margin-left: 1%; margin-right: 2px">
+        <a href="#/home"  class="cancelbtn2">Cancel</a>
+    </div>
+    <div style="float:left; margin-left: 1%;">
+        <a href="#/delete/post/?id={{_id}}"  onclick="return confirm('Are you sure you want to delete this sale ?')" class="deletebtn2">Delete</a>
+    </div>
+</div>
+{{/postDetails}}
+<!--{{#selectedArticleComments}}-->
+<!--&lt;!&ndash;<div id="comment-form">&ndash;&gt;-->
+<!--<p class="comment-author">{{author}}</p>-->
+<!--<p class="comment-date">{{date}}</p>-->
+<!--<p class="comment-content">{{content}}</p>-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--<br>-->
+<!--{{/selectedArticleComments}}-->
+
+<!--<div>-->
+    <!--<blockquote><b>Phone:</b> {{phone}}</blockquote>-->
+    <!--<b>Email:</b> {{email}}<br>-->
+    <!--<b>Tag</b>: {{tag}}<br>-->
+<!--</div>-->
+<!--<br>-->
