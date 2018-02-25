@@ -79,10 +79,21 @@
         postController.showCreatePostPage(loggedUser, authService.isLoggedIn());
     });
 
-    onRoute('#/post/:id', function () {
+    onRoute('#/post/:id', function () {   // this is when we open the sale details
         sessionStorage.setItem('id', this.params['id']);
         postController.getPost();
     });
+
+    bindEventHandler('loadComments', function (event, data){  //  this is when we open the sale details
+        // Creates a list of all comments
+        commentController.loadComments(data);
+    });
+
+    bindEventHandler('postCommentList', function (event, data){  // this is when we open the sale details
+        // Post a list with all comments
+        postController.showPostDetails(data);
+    });
+    
     onRoute("#/edit/post/", function (postId) {
         postController.editPostPage(postId.params.id);
     });
@@ -108,15 +119,7 @@
         // Edit a new post...
         postController.editPost(data);
     });
-    bindEventHandler('loadComments', function (event, data){
-        // Creates a list of all comments
-        commentController.loadComments(data);
-    });
-
-    bindEventHandler('postCommentList', function (event, data){
-        // Post a list with all comments
-        postController.showPostDetails(data);
-    });
+   
 
     run('#/');
 })();

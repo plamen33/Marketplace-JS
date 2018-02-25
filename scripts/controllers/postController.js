@@ -34,19 +34,7 @@ class PostController {
             });
     }
 
-    getPost() {
-        let postid = sessionStorage.getItem('id');
-        let requestUrl = this._baseServiceUrl + postid;
 
-        this._requester.get(requestUrl,
-            function success(selectedPost) {
-                //showPopup('success', "You have loaded this sale post just fine!");
-                triggerEvent('loadComments', selectedPost);
-            },
-            function error() {
-                showPopup('error', "Error loading this sale post!");
-            });
-    }
 
     editPostPage(data){ // Download (get) the article from Kinvey
         let thisClass = this;
@@ -62,7 +50,6 @@ class PostController {
         );
     }
      //// the admin functionality was added, now only admins can edit everything
-    /// WHAT TO DO - backup this old functionality which reveals how PUT request works and save and return the short code:
     editPost(requestData) { //Upload (put) the Post in Kinvey
         if (requestData.title.length < 10) {
             showPopup('error', "Post title must consist of at least 10 symbols.");
@@ -74,7 +61,6 @@ class PostController {
             return;
         }
         let requestUrl = this._baseServiceUrl + requestData._id;
-        //let requestUrl = "https://baas.kinvey.com/appdata/kid_HkqgafcLG/posts/" + requestData._id;
         
         let postTitle = requestData.title;
         let postText = requestData.content;
@@ -109,28 +95,6 @@ class PostController {
             function error() {
                 showPopup("error", "You don't have authorization to edit this sale post.");
             });
-        
-        //  valid standard put request way
-        // function getKinveyUserAuthHeaders() {
-        //     return {
-        //         "Authorization": "Kinvey " + "16a6deb3-cef0-47ec-9f38-fb0e52cddbeb.IJv3ol5cmq6r2kS2ZWKDqMtt097f4awRhlF/3xhEYT8="
-        //     };
-        // }
-        // $.ajax({
-        //     method: 'PUT',
-        //     url: requestUrl,
-        //     headers: getKinveyUserAuthHeaders(),
-        //     data: request,
-        //     success: loadBooksSuccess,
-        //     error: handleAjaxError
-        // });
-        // function loadBooksSuccess(request){
-        //     redirectUrl("#/");
-        //     showPopup("success", "You have successfully edited this article");
-        // }
-        // function handleAjaxError(response) {
-        //     showPopup("error", "You don't have authorization to edit this article");
-        // }
     }
 
     deletePost(postId) { //Delete the selected sale post row in Kinvey
@@ -143,7 +107,7 @@ class PostController {
         let requestData = {
             headers: headers
         };
-        console.log(requestData);
+        //console.log(requestData);
         this._requester.delete(requestUrl, requestData,
             function success(response) {
                 showPopup("success", "You have successfully deleted this sale");
@@ -156,7 +120,88 @@ class PostController {
     goHome(){
         redirectUrl("#/")
     }
-    showPostDetails(post) {
-        this._postView.showPostDetails(post);
+
+    getPost() {   // needed when we display the sale post details
+        let postid = sessionStorage.getItem('id');
+        let requestUrl = this._baseServiceUrl + postid;
+
+        this._requester.get(requestUrl,
+            function success(selectedPost) {
+                //showPopup('success', "You have loaded this sale post just fine!");
+                triggerEvent('loadComments', selectedPost);
+            },
+            function error() {
+                showPopup('error', "Error loading this sale post!");
+            });
     }
-}
+
+
+    showPostDetails(requestDataPost) { // needed when we display the sale post details
+        // requestDataPost - is the post itself
+        this._postView.showPostDetails(requestDataPost);
+
+        let requestUrl = this._baseServiceUrl + requestDataPost._id;
+        let postTitle = requestDataPost.title;
+        let postText = requestDataPost.content;
+        let postAuthor = requestDataPost.author;
+        let date = requestDataPost.date;
+        let tagName = requestDataPost.tag;
+        let authorUsername = requestDataPost.authUsername;
+        let email = requestDataPost.email;
+        let phone = requestDataPost.phone;
+        let imageLink = requestDataPost.image;
+        let price = requestDataPost.price;
+        let views = Number(requestDataPost.views) + 1; // increase the view counter
+        let authToken = requestDataPost.authToken;  // this is only needed if we use a standard PUT request
+
+
+        let request = {
+            title: postTitle,
+            content: postText,
+            author: postAuthor,
+            date: date,
+            tag: tagName,
+            email: email,
+            phone: phone,
+            image: imageLink,
+            price: price,
+            views: views,
+            auth_username: authorUsername
+        };
+
+        let urn = this._baseServiceUrl.substring(0, 46) + "forviews";
+
+        let headersOne = {"Authorization": "Basic " + "dXNlcjoxMjM0NQ==", "Content-type": "application/json"};
+
+        $.ajax({
+            method: "GET",
+            url: urn,
+            headers: headersOne,
+            success: loadSuccessData,
+            error: handleAjaxErrorOne
+        });
+        function loadSuccessData(data){
+            // showPopup("success", "READ DATA FINE");
+            let lnx = data[0].data;
+            let headers = { "Authorization": "Kinvey " + lnx };
+
+            $.ajax({
+                method: 'PUT',
+                url: requestUrl,
+                headers: headers,
+                data: request,
+                success: loadViewSuccess,
+                error: handleAjaxError
+            });
+            function loadViewSuccess(request){
+               // showPopup("success", "sale post view increased with 1");
+            }
+            function handleAjaxError(response) {
+                // showPopup("error", "Cannot increase the view counter");
+            }
+        }
+        function handleAjaxErrorOne(response) {
+            showPopup("error", "I cannot read from DB, while opening sale post details page");
+        }
+    }
+}// end of class PostController

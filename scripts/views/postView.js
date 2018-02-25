@@ -22,7 +22,7 @@ class PostView {
                 $('#author').val(user.fullname);
          
                 $('#create-new-post-request-button').on('click', function (ev) {
-                    // when clicked - we first extract the title, author and content of the current post
+                    // when clicked - we first extract the title, author, content, etc. of the current sale post
                     let title = $('#title').val();
                     let author = $('#author').val();
                     let content = $('#content').val();
@@ -33,6 +33,7 @@ class PostView {
                     let date = moment().format("MMMM Do YYYY");
                     let tag = $('#tag').val();
                     let price = $('#price').val();
+                    let views = 0;
 
                     // Then we create a data object to hold the necessary things for our post, and we trigger an event “createPost” and pass the object with it
                     let data = {
@@ -45,6 +46,7 @@ class PostView {
                         phone: phone,
                         image: image,
                         price: price,
+                        views: views,
                         auth_username: user.username
                     };
 
@@ -55,6 +57,7 @@ class PostView {
     }
 
     showEditPostPage(data) {//Show the post which we want to edit
+        console.log(sessionStorage.getItem('authToken'));
         let thisClass = this;
         let templateUrl;
         let authToken = sessionStorage['_authToken'];
