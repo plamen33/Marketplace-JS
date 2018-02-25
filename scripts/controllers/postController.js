@@ -36,12 +36,17 @@ class PostController {
 
 
 
-    editPostPage(data){ // Download (get) the article from Kinvey
+    editPostPage(postId){ // Download (get) the article from Kinvey
         let thisClass = this;
-        let requestUrl = this._baseServiceUrl + data;
+
+        if(postId == ""){
+            postId = sessionStorage.getItem('id'); // this is needed when we edit the sale from the sale post details page
+        }
+        // console.log("===>postId:   " + postId);
+        let requestUrl = this._baseServiceUrl + postId;
         this._requester.get(requestUrl,
             function success(data){
-                //showPopup('info', "You have successfully loaded the selected post!");
+                // showPopup('info', "You have successfully loaded the selected post!");
                 thisClass._postView.showEditPostPage(data);
             },
             function error() {
@@ -72,6 +77,7 @@ class PostController {
         let phone = requestData.phone;
         let imageLink = requestData.image;
         let price = requestData.price;
+        let views = requestData.views;
         let authToken = requestData.authToken;  // this is only needed if we use a standard PUT request
 
         let request = {
@@ -84,6 +90,7 @@ class PostController {
             phone: phone,
             image: imageLink,
             price: price,
+            views: views,
             auth_username: authorUsername
         };
       
@@ -138,7 +145,7 @@ class PostController {
 
     showPostDetails(requestDataPost) { // needed when we display the sale post details
         // requestDataPost - is the post itself
-        this._postView.showPostDetails(requestDataPost);
+        //this._postView.showPostDetails(requestDataPost);  // by showing this sale will show the previous views number
 
         let requestUrl = this._baseServiceUrl + requestDataPost._id;
         let postTitle = requestDataPost.title;
@@ -146,7 +153,7 @@ class PostController {
         let postAuthor = requestDataPost.author;
         let date = requestDataPost.date;
         let tagName = requestDataPost.tag;
-        let authorUsername = requestDataPost.authUsername;
+        let authorUsername = requestDataPost.auth_username;
         let email = requestDataPost.email;
         let phone = requestDataPost.phone;
         let imageLink = requestDataPost.image;
@@ -159,17 +166,21 @@ class PostController {
             title: postTitle,
             content: postText,
             author: postAuthor,
+            auth_username: authorUsername,
             date: date,
             tag: tagName,
             email: email,
             phone: phone,
             image: imageLink,
             price: price,
-            views: views,
-            auth_username: authorUsername
+            views: views
         };
 
+        this._postView.showPostDetails(request);
+
+        ///// we show the sale post details page with actual views number:
         let urn = this._baseServiceUrl.substring(0, 46) + "forviews";
+        /////
 
         let headersOne = {"Authorization": "Basic " + "dXNlcjoxMjM0NQ==", "Content-type": "application/json"};
 
@@ -205,3 +216,4 @@ class PostController {
         }
     }
 }// end of class PostController
+

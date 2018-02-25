@@ -56,8 +56,9 @@ class PostView {
         });
     }
 
-    showEditPostPage(data) {//Show the post which we want to edit
-        console.log(sessionStorage.getItem('authToken'));
+    showEditPostPage(data) {//Show the sale post which we want to edit; data is the sale post
+        //console.log(sessionStorage.getItem('authToken'));
+        console.log(data);
         let thisClass = this;
         let templateUrl;
         let authToken = sessionStorage['_authToken'];
@@ -74,7 +75,7 @@ class PostView {
         //     let navSelector = Mustache.render(template, null);
         //     $(thisClass._wrapperSelector).html(navSelector);
         // });
-        console.log(authToken);
+        //console.log(authToken);
         if(loggedUser == "admin"){
             //console.log(loggedUser);
             $.get('templates/edit-post.html', function (template) {
@@ -91,12 +92,17 @@ class PostView {
                 let authorUserName = data.auth_username;
                 let postId = data._id;
                 let postAuthor = data.author;
+                let views = data.views;
                 
                 let authorToken = authToken;  // the authorization token
-                
+
+                let prevTagValue = data.tag;
                 $('#edit-post-request-button').on('click', function (ev) {
                     
                     let tag = $('#tag').val();
+                    if(tag == "-------"){
+                        tag = prevTagValue;
+                    }
                     let date = moment().format("MMMM Do YYYY");
                     let data = {
                         "title":  document.getElementById('title').value,
@@ -109,6 +115,7 @@ class PostView {
                         "phone": document.getElementById('phone').value,
                         "image": document.getElementById('image').value,
                         "price": document.getElementById('price').value,
+                        "views": views,
                         "authToken": authorToken,
                         "authUsername": authorUserName
                     };
@@ -135,10 +142,16 @@ class PostView {
                 document.getElementById('price').value = data.price;
                 let postId = data._id;
                 let authorUserName = data.auth_username;
+                let views = data.views;
                 
                 let authorToken = authToken;  // the authorization token
+
+                let prevTagValue = data.tag;
                 $('#edit-post-request-button').on('click', function (ev) {
                     let tag = $('#tag').val();
+                    if(tag == "-------"){
+                        tag = prevTagValue;
+                    }
                     let authorName = sessionStorage.getItem("fullname");
                     let date = moment().format("MMMM Do YYYY");
                     let data = {
@@ -152,6 +165,7 @@ class PostView {
                         "phone": document.getElementById('phone').value,
                         "image": document.getElementById('image').value,
                         "price": document.getElementById('price').value,
+                        "views": views,
                         "authToken": authorToken,
                         "authUsername": authorUserName
                     };
