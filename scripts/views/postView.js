@@ -189,4 +189,28 @@ class PostView {
             $(thisClass._mainContentSelector).html(renderMainContent);
         });
     }
+    showSortedPost(data, isLoggedIn) {//Sorts sales posts By Tag Name
+        let thisClass = this;
+        let tagName = data[0].tag;
+        let tagArray = [];
+        tagArray[0] = { "tagN":tagName};
+        console.log(tagArray);
+        console.log(tagName);
+        let postsData = {
+            sortedPosts: data,  // sortedPosts is used in the postsByTagName.html
+            nameOfTag: tagArray
+        };
+        if(isLoggedIn){
+            $.get('templates/postsByTagName.html', function (template) {
+                var renderMainContent = Mustache.render(template, postsData);
+                $(thisClass._mainContentSelector).html(renderMainContent);
+            });
+        } else{
+            $.get('templates/postsByTagName-guest.html', function (template) {
+                var renderMainContent = Mustache.render(template, postsData);
+                $(thisClass._mainContentSelector).html(renderMainContent);
+            });
+        }
+
+    }
 }

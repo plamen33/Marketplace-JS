@@ -106,6 +106,9 @@ class PostController {
 
     deletePost(postId) { //Delete the selected sale post row in Kinvey
         console.log(postId);
+        if(postId == ""){
+            postId = sessionStorage.getItem('id'); 
+        }
         let requestUrl = this._baseServiceUrl + postId;
 
         let headers = {};
@@ -215,5 +218,35 @@ class PostController {
             showPopup("error", "I cannot read from DB, while opening sale post details page");
         }
     }
-}// end of class PostController
 
+    sortPostByTag(tagName, isLoggedIn) { //Sort The article by Tag Name
+        let _that = this;
+        let postByTag = [];
+        let requestUrl = this._baseServiceUrl;
+        let sportTag = tagName;
+        this._requester.get(requestUrl,
+            function success(data) {
+                data.sort(function (elem1, elem2) {
+                    let date1 = new Date(elem1._kmd.ect);
+                    let date2 = new Date(elem2._kmd.ect);
+                    return date2 - date1;
+                });
+
+                for (let i = 0; i < data.length; i++) {
+                    if (data[i].tag == sportTag) {
+                        postByTag.push(data[i]);
+                    }
+                }
+
+                _that._postView.showSortedPost(postByTag, isLoggedIn);
+            },
+            function error() {
+                showPopup('error', "Error loading posts!");
+            }
+        );
+    }
+
+    
+
+
+}// end of class PostController

@@ -184,8 +184,20 @@ header {
     text-transform: uppercase;
     text-align: center;
     border-bottom: 8px solid #019c8c;
+}
+
+.page-title {
+    width: 321px;
+    font: 33px Oswald;
+    font-weight: 500;
+    margin: 0 auto 50px;
+    color: #575757;
+    text-transform: uppercase;
+    text-align: center;
+    border-bottom: 8px solid #019c8c;
 
 }
+
 
 .sidebar {
     float: left;
@@ -733,6 +745,41 @@ a.deletebtn2:active {
     top:1px;
 }
 
+/*tag button*/
+
+.tagbtn {
+    border-top: 1px solid #97b3f7;
+    background: #a5c1d4;
+    background: -webkit-gradient(linear, left top, left bottom, from(#647682), to(#a5c1d4));
+    background: -webkit-linear-gradient(top, #647682, #a5c1d4);
+    background: -moz-linear-gradient(top, #647682, #a5c1d4);
+    background: -ms-linear-gradient(top, #647682, #a5c1d4);
+    background: -o-linear-gradient(top, #647682, #a5c1d4);
+    padding: 5px 10px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    -webkit-box-shadow: rgb(179, 179, 179) 0 1px 0;
+    -moz-box-shadow: rgb(179, 179, 179) 0 1px 0;
+    box-shadow: rgb(179, 179, 179) 0 1px 0;
+    text-shadow: rgba(0,0,0,.4) 0 1px 0;
+    color: white;
+    font-size: 12px;
+    font-family: Georgia, serif;
+    text-decoration: none;
+    vertical-align: middle;
+}
+.tagbtn:hover {
+    border-top-color: #5c6273;
+    background: #5c6273;
+    color: #ccc;
+}
+.tagbtn:active {
+    border-top-color: #4e5f6b;
+    background: #4e5f6b;
+}
+
+
 
 
 
@@ -767,5 +814,19 @@ a.deletebtn2:active {
 .border li:nth-child(4):hover {border-right: 10px solid #8f57f0;}
 .border li:nth-child(5):hover {border-right: 10px solid #493224;}
 
+
+.label {
+    color: white;
+    padding: 8px;
+    font-family: Arial;
+    border-radius: 7px;
+
+}
+.success {background-color: #4CAF50;} /* Green */
+.teal {background-color: #3fafa0;} /* Teal */
+.info {background-color: #2196F3;} /* Blue */
+.warning {background-color: #ff9800;} /* Orange */
+.danger {background-color: #f44336;} /* Red */
+.other {background-color: #e7e7e7; color: black;} /* Gray */
 
 

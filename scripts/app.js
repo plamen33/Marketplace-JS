@@ -95,10 +95,20 @@
     });
     
     onRoute("#/edit/post/", function (postId) {
-        postController.editPostPage(postId.params.id);
+        postController.editPostPage(postId.params['id']);
     });
     onRoute('#/delete/post/', function (postId) {
-        postController.deletePost(postId.params.id);
+        postController.deletePost(postId.params['id']);
+    });
+    onRoute('#/tag/', function (data) {
+        let tagName = data.params.tag;
+        
+        if(authService.isLoggedIn()){
+            postController.sortPostByTag(tagName, true);
+        } else{
+            postController.sortPostByTag(tagName, false);
+        }
+
     });
 
     bindEventHandler('login', function (ev, data) {
