@@ -83,26 +83,29 @@
         sessionStorage.setItem('id', this.params['id']);
         postController.getPost();
     });
+    onRoute('#/create/comment/', function () {
 
-    bindEventHandler('loadComments', function (event, data){  //  this is when we open the sale details
-        // Creates a list of all comments
-        commentController.loadComments(data);
+     
+
+        commentController.showCreateCommentPage(authService.isLoggedIn());
+
+        //sessionStorage.setItem('id', postId.params['id']);
     });
 
-    bindEventHandler('postCommentList', function (event, data){  // this is when we open the sale details
-        // Post a list with all comments
-        postController.showPostDetails(data);
-    });
-    
     onRoute("#/edit/post/", function (postId) {
+        console.log("psot ID: "+postId.params._id);
+        console.log(postId);
         postController.editPostPage(postId.params['id']);
     });
     onRoute('#/delete/post/', function (postId) {
         postController.deletePost(postId.params['id']);
     });
+    onRoute('#/delete/comment/', function (commentId) {
+        commentController.deleteComment(commentId.params['id']);
+    });
     onRoute('#/tag/', function (data) {
         let tagName = data.params.tag;
-        
+
         if(authService.isLoggedIn()){
             postController.sortPostByTag(tagName, true);
         } else{
@@ -110,6 +113,27 @@
         }
 
     });
+    // onRoute('#/postCommentList', function (event, data) {   // this is when we open the sale details
+    //     postController.showPostDetails(data);
+    // });
+
+    bindEventHandler('createComment', function (event, data) {
+        //  Create a new comment...
+        commentController.createComment(data);
+    });
+
+    bindEventHandler('loadComments', function (event, data){  //  this is when we open the sale details
+        // Creates a list of all comments
+        commentController.loadComments(data);
+    });
+
+    bindEventHandler('postCommentList', function (event, data){  // this is when we open the sale details
+        // Post a list with all comments/
+        console.log("postCommentList appjs");
+        postController.showPostDetails(data);
+    });
+    
+
 
     bindEventHandler('login', function (ev, data) {
         // Login the user...

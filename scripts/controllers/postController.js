@@ -42,6 +42,7 @@ class PostController {
         if(postId == ""){
             postId = sessionStorage.getItem('id'); // this is needed when we edit the sale from the sale post details page
         }
+        console.log(postId);
         // console.log("===>postId:   " + postId);
         let requestUrl = this._baseServiceUrl + postId;
         this._requester.get(requestUrl,
@@ -163,7 +164,7 @@ class PostController {
         let price = requestDataPost.price;
         let views = Number(requestDataPost.views) + 1; // increase the view counter
         let authToken = requestDataPost.authToken;  // this is only needed if we use a standard PUT request
-
+        let commentsArray = requestDataPost['commentsList'];
 
         let request = {
             title: postTitle,
@@ -178,6 +179,7 @@ class PostController {
             price: price,
             views: views
         };
+        request['commentsList'] = commentsArray;
 
         this._postView.showPostDetails(request);
 
@@ -246,7 +248,5 @@ class PostController {
         );
     }
 
-    
-
-
+   
 }// end of class PostController

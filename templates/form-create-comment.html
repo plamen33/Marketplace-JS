@@ -1,0 +1,27 @@
+<div class="new-post-block">
+    <h2 id="editor-title">Add comment</h2>
+    <form id="post-form">
+        <ul class="title-author">
+            <li class="single-element-form">
+                <h1 class="title-form">Author:</h1>
+                <input type="text" value="" placeholder="Author" id="commentAuthor" disabled>
+            </li>
+        </ul>
+        <h1 id="title-form">Content:</h1>
+        <textarea class="content-field" placeholder="Content" id="commentContent"></textarea>
+
+        <!--<button type="button" id="create-new-comment-request-button">Create a comment</button>-->
+        <div style="float:left; margin-left: 40%; margin-right: 10px">
+            <a href="#" class="actionbtn" id="create-new-comment-request-button"  onclick="window.history.go(-1); return false;">Comment</a>
+        </div>
+        <div style="float:left">
+            <a href="#" onclick="window.history.go(-1); return false;" class="cancelbtn">Back</a>
+        </div>
+        <br><br><br><br><br>
+    </form>
+</div>
+
+<footer>
+    <p class="footer-text">&copy; Software Development Project, 2018</p>
+</footer>
+
