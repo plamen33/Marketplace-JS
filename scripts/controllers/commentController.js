@@ -51,7 +51,7 @@ class CommentController {
     }
 
     deleteComment(commentId) { //Delete the selected sale post row in Kinvey
-        console.log(commentId);
+
         if(commentId == ""){
             commentId = sessionStorage.getItem('id');
         }
@@ -63,7 +63,7 @@ class CommentController {
         let requestData = {
             headers: headers
         };
-        //console.log(requestData);
+
         this._requester.delete(requestUrl, requestData,
             function success(response) {
                 showPopup("success", "You have successfully deleted this comment");

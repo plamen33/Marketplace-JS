@@ -147,7 +147,7 @@ class PostController {
     }
 
 
-    showPostDetails(requestDataPost) { // needed when we display the sale post details
+    showPostDetails(requestDataPost, isLoggedIn) { // needed when we display the sale post details
         // requestDataPost - is the post itself
         //this._postView.showPostDetails(requestDataPost);  // by showing this sale will show the previous views number
 
@@ -181,7 +181,7 @@ class PostController {
         };
         request['commentsList'] = commentsArray;
 
-        this._postView.showPostDetails(request);
+        this._postView.showPostDetails(request, isLoggedIn);
 
         ///// we show the sale post details page with actual views number:
         let urn = this._baseServiceUrl.substring(0, 46) + "forviews";
@@ -248,5 +248,8 @@ class PostController {
         );
     }
 
-   
+    
+
+
 }// end of class PostController
+

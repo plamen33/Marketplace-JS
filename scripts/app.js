@@ -35,6 +35,9 @@
     let commentView = new CommentView(selector,mainContentSelector);
     let commentController = new CommentController(commentView, requester, baseUrl, appKey);
 
+    let chartView = new ChartView(selector,mainContentSelector);
+    let chartController = new ChartController(chartView, requester, baseUrl, appKey);
+    
     initEventServices();
     // onRoute function is provided by the framework
     onRoute("#/", function () {
@@ -84,9 +87,6 @@
         postController.getPost();
     });
     onRoute('#/create/comment/', function () {
-
-     
-
         commentController.showCreateCommentPage(authService.isLoggedIn());
 
         //sessionStorage.setItem('id', postId.params['id']);
@@ -101,6 +101,7 @@
         postController.deletePost(postId.params['id']);
     });
     onRoute('#/delete/comment/', function (commentId) {
+        // console.log(this.params['id']);
         commentController.deleteComment(commentId.params['id']);
     });
     onRoute('#/tag/', function (data) {
@@ -113,9 +114,10 @@
         }
 
     });
-    // onRoute('#/postCommentList', function (event, data) {   // this is when we open the sale details
-    //     postController.showPostDetails(data);
-    // });
+    onRoute('#/salesChart', function () {
+        
+        chartController.showCreateChart(authService.isLoggedIn());
+    });
 
     bindEventHandler('createComment', function (event, data) {
         //  Create a new comment...
@@ -129,8 +131,7 @@
 
     bindEventHandler('postCommentList', function (event, data){  // this is when we open the sale details
         // Post a list with all comments/
-        console.log("postCommentList appjs");
-        postController.showPostDetails(data);
+        postController.showPostDetails(data, authService.isLoggedIn());
     });
     
 

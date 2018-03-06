@@ -16,17 +16,8 @@
         <li>Price</b>: {{price}}</li>
     </ul>
     <br><br>
-    <div style="float:left; margin-left: 10%; ">
-        <a href="#/edit/post/?id={{_id}}" class="actionbtn2">Edit Sale</a>
-    </div>
     <div style="float:left; margin-left: 1%; margin-right: 2px">
-        <a href="#/home"  class="cancelbtn2">Cancel</a>
-    </div>
-    <div style="float:left; margin-left: 1%; margin-right: 2px">
-        <a href="#/create/comment/?id={{_id}}"  class="commentbtn2">Comment</a>
-    </div>
-    <div style="float:left; margin-left: 1%;">
-        <a href="#/delete/post/?id={{_id}}"  onclick="return confirm('Are you sure you want to delete this sale ?')" class="deletebtn2">Delete</a>
+        <a href="#/home"  class="cancelbtn2" >Back</a>
     </div>
     <br>
     <article style="padding: 30px ">
@@ -44,21 +35,15 @@
     <blockquote class="blockquote">
         <p  style="font-weight: bold; margin-left: 17px; margin-bottom: 7px">{{author}}</p>
         <p  style="color: #919873; margin-left: 37px; margin-bottom: 12px; font-size: 14px">{{date}}</p>
-        <p style="color: #41649c; margin-left: 17px;  margin-bottom: 3px;">"{{content}}" </p>
-
-        <!--<div style="float:left; margin-left: 3%; margin-right: 10px">-->
-            <!--<a href="#/delete/comment/?id={{_id}}"  class="deletebtn3">Delete</a>-->
-        <!--</div>-->
-        <p style="margin-left: 210px"><a href="#/delete/comment/?id={{_id}}"  class="deletebtn3">Delete</a></p>
-
+        <p  style="color: #41649c; margin-left: 17px;  margin-bottom: 3px;">"{{content}}" </p>
     </blockquote>
 </div>
 <br>
 {{/postComments}}
 
 <!--<div>-->
-    <!--<blockquote><b>Phone:</b> {{phone}}</blockquote>-->
-    <!--<b>Email:</b> {{email}}<br>-->
-    <!--<b>Tag</b>: {{tag}}<br>-->
+<!--<blockquote><b>Phone:</b> {{phone}}</blockquote>-->
+<!--<b>Email:</b> {{email}}<br>-->
+<!--<b>Tag</b>: {{tag}}<br>-->
 <!--</div>-->
 <!--<br>-->

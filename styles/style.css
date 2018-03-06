@@ -198,6 +198,27 @@ header {
 
 }
 
+.pagetwo-title {
+    width: 200px;
+    font: 33px Oswald;
+    font-weight: 600;
+    margin: 0 auto 50px;
+    color: #575757;
+    text-transform: uppercase;
+    text-align: center;
+    border-bottom: 7px solid #019c8c;
+}
+.testone {
+    width: 200px;
+    font: 33px Oswald;
+    font-weight: 600;
+
+    /*margin: 0 auto 50px;  #f5e39a #6ceb7a*/
+    color: #575757;
+    text-transform: uppercase;
+    text-align: center;
+    border-bottom: 7px solid #58d8b2;
+}
 
 .sidebar {
     float: left;
@@ -823,32 +844,48 @@ a.commentbtn2:active {
     background: #4e5f6b;
 }
 
+
 .deletebtn3 {
-    -moz-box-shadow:inset 0px 39px 0px -24px #e67a73;
-    -webkit-box-shadow:inset 0px 39px 0px -24px #e67a73;
-    box-shadow:inset 0px 39px 0px -24px #e67a73;
-    background-color:#e4685d;
-    -moz-border-radius:4px;
-    -webkit-border-radius:4px;
-    border-radius:4px;
-    border:1px solid #ffffff;
+    -moz-box-shadow:inset 0px 1px 0px 0px #fce2c1;
+    -webkit-box-shadow:inset 0px 1px 0px 0px #fce2c1;
+    box-shadow:inset 0px 1px 0px 0px #fce2c1;
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffc477), color-stop(1, #fb9e25));
+    background:-moz-linear-gradient(top, #ffc477 5%, #fb9e25 100%);
+    background:-webkit-linear-gradient(top, #ffc477 5%, #fb9e25 100%);
+    background:-o-linear-gradient(top, #ffc477 5%, #fb9e25 100%);
+    background:-ms-linear-gradient(top, #ffc477 5%, #fb9e25 100%);
+    background:linear-gradient(to bottom, #ffc477 5%, #fb9e25 100%);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffc477', endColorstr='#fb9e25',GradientType=0);
+    background-color:#ffc477;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-radius:5px;
+    border:1px solid #eeb44f;
     display:inline-block;
     cursor:pointer;
     color:#ffffff;
     font-family:Arial;
     font-size:15px;
-    padding:3px 3px;
+    font-weight:bold;
+    padding:1px 4px;
     text-decoration:none;
-    text-shadow:0px 1px 0px #b23e35;
+    text-shadow:0px 1px 0px #cc9f52;
 }
 .deletebtn3:hover {
-    background-color:#eb675e;
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #fb9e25), color-stop(1, #ffc477));
+    background:-moz-linear-gradient(top, #fb9e25 5%, #ffc477 100%);
+    background:-webkit-linear-gradient(top, #fb9e25 5%, #ffc477 100%);
+    background:-o-linear-gradient(top, #fb9e25 5%, #ffc477 100%);
+    background:-ms-linear-gradient(top, #fb9e25 5%, #ffc477 100%);
+    background:linear-gradient(to bottom, #fb9e25 5%, #ffc477 100%);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fb9e25', endColorstr='#ffc477',GradientType=0);
+    background-color:#fb9e25;
 }
 .deletebtn3:active {
     position:relative;
-    background-color: #ebb597;
     top:1px;
 }
+
 
 
 

@@ -178,16 +178,24 @@ class PostView {
             });
         }
     }
-    showPostDetails(post) { //Show the article which we want to see (incl. all comments)
+    showPostDetails(post, isLoggedIn) { //Show the article which we want to see (incl. all comments)
         let thisClass = this;
         let postData = {
-            postDetails: post   // this what we pass to the view
-            // postComments: post['commentsList']   // future implementation
+            postDetails: post,  // this what we pass to the view
+            postComments: post['commentsList']   // future implementation
         };
-        $.get('templates/details-post.html', function (template) {
-            var renderMainContent = Mustache.render(template, postData);
-            $(thisClass._mainContentSelector).html(renderMainContent);
-        });
+
+        if(isLoggedIn){
+            $.get('templates/details-post.html', function (template) {
+                var renderMainContent = Mustache.render(template, postData);
+                $(thisClass._mainContentSelector).html(renderMainContent);
+            });
+        } else{
+            $.get('templates/details-post-guest.html', function (template) {
+                var renderMainContent = Mustache.render(template, postData);
+                $(thisClass._mainContentSelector).html(renderMainContent);
+            });
+        }
     }
     showSortedPost(data, isLoggedIn) {//Sorts sales posts By Tag Name
         let thisClass = this;
