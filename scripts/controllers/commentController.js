@@ -12,22 +12,22 @@ class CommentController {
         this._commentView.showCreateCommentPage(isLoggedIn);
     }
 
-    createComment(requestData) { //Create new comment to the selected article
-        if (requestData.content.length < 5) {
-            showPopup('error', "Comment must consist of at least 5 characters.");
-            return;
-        }
-
-        let requestUrl = this._baseServiceUrl;
-        this._requester.post(requestUrl, requestData,
-            function success(data) {
-                showPopup('success', "You have successfully added a new comment.");
-                redirectUrl("#/home");
-            },
-            function error(data) {
-                showPopup('error', "An error has occurred while attempting to create a comment.");
-            });
+    createComment(requestData) { //Create new comment to the selected sales post
+    if (requestData.content.length < 5) {
+        showPopup('error', "Comment must consist of at least 5 characters.");
+        return;
     }
+
+    let requestUrl = this._baseServiceUrl;
+    this._requester.post(requestUrl, requestData,
+        function success(data) {
+            showPopup('success', "You have successfully added a new comment.");
+            redirectUrl("#/home");
+        },
+        function error(data) {
+            showPopup('error', "An error has occurred while attempting to create a comment.");
+        });
+}
 
     loadComments(requestData) { //Load comments using post Id from Kinvey
 
@@ -50,8 +50,9 @@ class CommentController {
             });
     }
 
+    // this method is deleting comments and then returning to same page and show the actual displayed comments:
     deleteComment(commentId) { //Delete the selected sale post row in Kinvey
-
+        console.log(commentId);
         if(commentId == ""){
             commentId = sessionStorage.getItem('id');
         }
@@ -64,13 +65,158 @@ class CommentController {
             headers: headers
         };
 
-        this._requester.delete(requestUrl, requestData,
-            function success(response) {
-                showPopup("success", "You have successfully deleted this comment");
-                redirectUrl("#")
+        let serviceUrl = this._baseServiceUrl;
+        serviceUrl = serviceUrl.substring(0, serviceUrl.length-9); // https://baas.kinvey.com/appdata/kid_HkqgafcLG/
+        let thisRequester = this._requester;
+        this._requester.get(this._baseServiceUrl,
+            function success(data) {
+                let postid = "";
+                for (let comment of data) {
+                    if (comment._id == commentId)  {
+                        postid = comment.postid;
+                    }
+                }
+                let requestUrlPost = serviceUrl +"posts/" + postid;///test
+
+                thisRequester.delete(requestUrl, requestData,
+                    function success(response) {
+                        showPopup("success", "You have successfully deleted this comment");
+                        thisRequester.get(requestUrlPost,
+                            function success(selectedPost) {
+                                //showPopup('success', "You have loaded this sale post just fine!");
+                                triggerEvent('loadComments', selectedPost);
+                            },
+                            function error() {
+                                showPopup('error', "Error loading this sale post!");
+                            });
+                    },
+                    function error(response) {
+                        showPopup("error", "You don't have authorization to delete this sale comment !");
+                    });
             },
-            function error(response) {
-                showPopup("error", "You don't have authorization to delete this sale comment !");
+
+            function error(data) {
+                showPopup('error', "Error");
             });
     }
 }
+
+// original method:
+// createComment(requestData) { //Create new comment to the selected article
+//     if (requestData.content.length < 5) {
+//         showPopup('error', "Comment must consist of at least 5 characters.");
+//         return;
+//     }
+//
+//     let requestUrl = this._baseServiceUrl;
+//     this._requester.post(requestUrl, requestData,
+//         function success(data) {
+//             showPopup('success', "You have successfully added a new comment.");
+//             redirectUrl("#/home");
+//         },
+//         function error(data) {
+//             showPopup('error', "An error has occurred while attempting to create a comment.");
+//         });
+// }
+
+
+/// original method without focus after success delete -> goes back to main page
+// deleteComment(commentId) { //Delete the selected sale post row in Kinvey
+//
+//     if(commentId == ""){
+//         commentId = sessionStorage.getItem('id');
+//     }
+//     let requestUrl = this._baseServiceUrl + commentId;
+//
+//     let headers = {};
+//     headers['Authorization'] = "Kinvey " + sessionStorage.getItem('_authToken');
+//     headers['Content-Type'] = "application/json";
+//     let requestData = {
+//         headers: headers
+//     };
+//
+//     this._requester.delete(requestUrl, requestData,
+//         function success(response) {
+//             showPopup("success", "You have successfully deleted this comment");
+//             redirectUrl("#")
+//         },
+//         function error(response) {
+//             showPopup("error", "You don't have authorization to delete this sale comment !");
+//         });
+// }
+
+
+// createComment(requestData) { //Create new comment to the selected sale post, requestData is the comment itself
+//     if (requestData.content.length < 5) {
+//         showPopup('error', "Comment must consist of at least 5 characters.");
+//         return;
+//     }
+//     let postid = requestData.postid; // +++
+//     console.log("postid  " + postid);
+//     let requestUrl = this._baseServiceUrl;
+//     this._requester.post(requestUrl, requestData,
+//         function success(data) {
+//             showPopup('success', "You have successfully added a new comment.");
+//             redirectUrl("#/home");
+//         },
+//         function error(data) {
+//             showPopup('error', "An error has occurred while attempting to create a comment.");
+//         });
+// }
+
+
+
+
+// this method is deleting comments and then returning to same page and show the actual displayed comments:
+//            deleteComment(commentId) { //Delete the selected sale post row in Kinvey
+//                console.log(commentId);
+//                if(commentId == ""){
+//                    commentId = sessionStorage.getItem('id');
+//                }
+//                let requestUrl = this._baseServiceUrl + commentId;
+//
+//                let headers = {};
+//                headers['Authorization'] = "Kinvey " + sessionStorage.getItem('_authToken');
+//                headers['Content-Type'] = "application/json";
+//                let requestData = {
+//                    headers: headers
+//                };
+//
+//                let serviceUrl = this._baseServiceUrl;
+//                serviceUrl = serviceUrl.substring(0, serviceUrl.length-9); // https://baas.kinvey.com/appdata/kid_HkqgafcLG/
+//                let thisRequester = this._requester;
+//                this._requester.get(this._baseServiceUrl,
+//                    function success(data) {
+//                        let postid = "";
+//                        for (let comment of data) {
+//                            if (comment._id == commentId)  {
+//                                postid = comment.postid;
+//                            }
+//                        }
+//                        let requestUrlPost = serviceUrl +"posts/" + postid;///test
+//
+//                        thisRequester.delete(requestUrl, requestData,
+//                            function success(response) {
+//                                showPopup("success", "You have successfully deleted this comment");
+//                                thisRequester.get(requestUrlPost,
+//                                    function success(selectedPost) {
+//                                        //showPopup('success', "You have loaded this sale post just fine!");
+//                                        triggerEvent('loadComments', selectedPost);
+//                                    },
+//                                    function error() {
+//                                        showPopup('error', "Error loading this sale post!");
+//                                    });
+//                            },
+//                            function error(response) {
+//                                showPopup("error", "You don't have authorization to delete this sale comment !");
+//                            });
+//                    },
+//
+//                    function error(data) {
+//                        showPopup('error', "Error");
+//                    });
+//
+//
+//
+//
+//            }
