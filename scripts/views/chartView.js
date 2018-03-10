@@ -21,7 +21,8 @@ class ChartView {
          console.log("showSalesChart in the View");
          console.log(recentPosts);
              let postData = {
-                 postDetails: recentPosts,  // this what we pass to the view
+                 postDetails: recentPosts[0]
+                 // this what we pass to the view
              };
          $.get('templates/sales-chart.html', function (template) {
 
@@ -54,7 +55,7 @@ class ChartView {
              let salesArrayTagThree = [];
              for(let date of dates){
                  let dateMoment = moment(date, 'DD-MM-YYYY');
-
+                 console.log("dateMoment " + dateMoment);
                  let intTagOne = 0;
                  let intTagTwo = 0;
                  let intTagThree = 0;
@@ -77,6 +78,9 @@ class ChartView {
                  salesArrayTagTwo.push(intTagTwo);
                  salesArrayTagThree.push(intTagThree);
              }
+             console.log(salesArrayTagOne);
+             console.log(salesArrayTagTwo);
+             console.log(salesArrayTagThree);
 
              let datasetsArrayOfObjects = [];
              if(labelTagOne!= undefined){
@@ -124,4 +128,47 @@ class ChartView {
 
      }
 }
+
+/// fake working - static Chart showing
+// showSalesChart(recentPosts){
+//     let thisClass = this;
+//     console.log("showSalesChart in the View");
+//     console.log(recentPosts);
+//     let postData = {
+//         postDetails: recentPosts,  // this what we pass to the view
+//     };
+//     $.get('templates/sales-chart.html', function (template) {
+//
+//         var renderMainContent = Mustache.render(template, postData);
+//         $(thisClass._mainContentSelector).html(renderMainContent);
+//
+//         new Chart(document.getElementById("bar-chart-grouped"), {
+//             type: 'bar',
+//             data: {
+//                 labels: ["1900", "1950", "1999", "2050"],
+//                 datasets: [
+//                     {
+//                         label: "Africa",
+//                         backgroundColor: "#3e95cd",
+//                         data: [133,221,783,2478]
+//                     }, {
+//                         label: "Europe",
+//                         backgroundColor: "#8e5ea2",
+//                         data: [408,547,675,734]
+//                     }
+//                 ]
+//             },
+//             options: {
+//                 title: {
+//                     display: true,
+//                     text: 'Population growth (millions)'
+//                 }
+//             }
+//         });
+//
+//
+//
+//     });
+//
+// }
 

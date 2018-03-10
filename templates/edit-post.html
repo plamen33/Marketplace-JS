@@ -44,26 +44,27 @@
         <ul class="title-author">
             <li class="single-element-form-type-one">
                 <h1 class="title-form">Email:</h1>
-                <input type="text" value="" placeholder="Author" id="email">
+                <input type="email" value="" placeholder="Author" id="email" title="This field is mandatory, please enter valid email address." required />
             </li>
             <li class="single-element-form">
                 <h1 class="title-form">Phone number:</h1>
-                <input type="text" value="" placeholder="Author" id="phone">
+                <input type="tel" value="" placeholder="Author" id="phone"  title="Please fill an appropriate phone number." />
             </li>
             <li class="single-element-form-type-one">
                 <h1 class="title-form">Image link:</h1>
-                <input type="text" value="" placeholder="Image link" id="image" />
+                <input type="url" value="" placeholder="Image link" id="image"  title="Please use valid URL for your photo image." />
             </li>
             <li class="single-element-form">
                 <h1 class="title-form">Price:</h1>
-                <input type="text" value="" placeholder="Price" id="price">
+                <input type="text" value="" placeholder="Price" id="price" title="Please put an appropriate price." />
             </li>
         </ul>
         <div style="float:left; margin-left: 40%; margin-right: 10px">
             <a href="#" class="actionbtn" id="edit-post-request-button" >Edit Sale</a>
         </div>
         <div style="float:left">
-            <a href="#/home" class="cancelbtn" >Cancel</a>
+            <a href="#" class="cancelbtn" id="edit-post-cancel-button">Cancel</a>
+            <!--<a href="#/home" class="cancelbtn" >Cancel</a>-->
         </div>
         <br><br><br><br><br>
     </form>

@@ -7,6 +7,7 @@ class ChartController {
     }
 
     showCreateChart(isLoggedIn){
+        console.log("welcome to chart");
 
         let thisClass = this;
 
@@ -20,7 +21,7 @@ class ChartController {
                 let currentId = 1;
 
                 data.sort(function (elem1, elem2) {
-                    let date1 = new Date(elem1._kmd.ect); 
+                    let date1 = new Date(elem1._kmd.ect); //Every Kinvey database object has a member called “_kmd” which holds metadata. ect member from the _kmd member is basically the time of creation of the current element.
                     let date2 = new Date(elem2._kmd.ect);
                     return date2 - date1; // sort elements by date descending - most recent is on the top
                 });
@@ -30,7 +31,9 @@ class ChartController {
                     currentId++;
                     recentPosts.push(data[i]);
                 }
-              
+                console.log(recentPosts);
+                // We pass the recentPosts filled up array and the data sorted array from the response to the view
+                // thisClass._homeView.showGuestPage(recentPosts, data); // we have all the data needed, and it is processed, sorted and formatted correctly, we can pass it to the view which will render the page
                   thisClass._chartView.showSalesChart(recentPosts);
             },
             function error(data) { // if there is an error show this error message

@@ -122,12 +122,14 @@ class PostView {
                     triggerEvent('editPost', data);
                 });
                 $('#edit-post-cancel-button').on('click', function (ev) {
-                    triggerEvent('goHome', null);
+                    //triggerEvent('goHome', null);
+                    triggerEvent('postCommentList', data);
                 });
             });
         } else if (loggedUser!=data.auth_username){
             showPopup("error", "You cannot edit other user posts !");
-            triggerEvent('goHome', null);
+            // triggerEvent('goHome', null);
+            triggerEvent('postCommentList', data);
         } else{
             $.get('templates/edit-post.html', function (template) {
 
@@ -173,7 +175,8 @@ class PostView {
                     triggerEvent('editPost', data);
                 });
                 $('#edit-post-cancel-button').on('click', function (ev) {
-                    triggerEvent('goHome', null);
+                    // triggerEvent('goHome', null);
+                    triggerEvent('postCommentList', data);
                 });
             });
         }

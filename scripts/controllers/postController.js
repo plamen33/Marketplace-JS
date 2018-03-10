@@ -12,13 +12,17 @@ class PostController {
 
     createPost(requestData) {
 
-        if (requestData.title.length < 3) {
-            showPopup('error', "Post title must consist of at least 10 symbols.");
+        if (requestData.title.length < 7) {
+            showPopup('error', "Post title must consist of at least 7 symbols.");
             return;
         }
 
-        if (requestData.content.length < 3) {
-            showPopup('error', "Post content must consist of at least 50 symbols.");
+        if (requestData.content.length < 10) {
+            showPopup('error', "Post content must consist of at least 10 symbols.");
+            return;
+        }
+        if (!this.validateEmail(requestData.email)) {
+            showPopup('error', "Please input valid email address");
             return;
         }
 
@@ -42,7 +46,7 @@ class PostController {
         if(postId == ""){
             postId = sessionStorage.getItem('id'); // this is needed when we edit the sale from the sale post details page
         }
-        console.log(postId);
+        //console.log(postId);
         // console.log("===>postId:   " + postId);
         let requestUrl = this._baseServiceUrl + postId;
         this._requester.get(requestUrl,
@@ -57,15 +61,22 @@ class PostController {
     }
      //// the admin functionality was added, now only admins can edit everything
     editPost(requestData) { //Upload (put) the Post in Kinvey
-        if (requestData.title.length < 10) {
-            showPopup('error', "Post title must consist of at least 10 symbols.");
+        if (requestData.title.length < 7) {
+            showPopup('error', "Post title must consist of at least 7 symbols.");
             return;
         }
 
-        if (requestData.content.length < 50) {
-            showPopup('error', "Post content must consist of at least 50 symbols.");
+        if (requestData.content.length < 10) {
+            showPopup('error', "Post content must consist of at least 10 symbols.");
             return;
         }
+
+        if (!this.validateEmail(requestData.email)) {
+            showPopup('error', "Please input valid email address");
+            return;
+        }
+
+
         let requestUrl = this._baseServiceUrl + requestData._id;
         
         let postTitle = requestData.title;
@@ -97,7 +108,8 @@ class PostController {
       
         this._requester.put(requestUrl, request,
             function success() {
-                redirectUrl("#/");
+                triggerEvent('loadComments', request);
+                //redirectUrl("#/");
                 showPopup("success", "You have successfully edited this sale post.");
             },
             function error() {
@@ -131,7 +143,7 @@ class PostController {
     goHome(){
         redirectUrl("#/")
     }
-
+    
     getPost() {   // needed when we display the sale post details
         let postid = sessionStorage.getItem('id');
         let requestUrl = this._baseServiceUrl + postid;
@@ -248,8 +260,15 @@ class PostController {
         );
     }
 
-    
+    validateEmail(email) {
 
+        let filter = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+        // more simple email validation: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        if (!filter.test(email)) {
+            return false;
+        } else{
+            return true;
+        }
+    }
 
 }// end of class PostController
-
