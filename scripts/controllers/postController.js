@@ -47,7 +47,7 @@ class PostController {
             postId = sessionStorage.getItem('id'); // this is needed when we edit the sale from the sale post details page
         }
         //console.log(postId);
-        // console.log("===>postId:   " + postId);
+         console.log("===>postId:   " + postId);
         let requestUrl = this._baseServiceUrl + postId;
         this._requester.get(requestUrl,
             function success(data){
@@ -105,10 +105,10 @@ class PostController {
             views: views,
             auth_username: authorUsername
         };
-      
+        let id = requestData._id;
         this._requester.put(requestUrl, request,
             function success() {
-                triggerEvent('loadComments', request);
+                redirectUrl("#/post/{{"+ id +"}}");
                 //redirectUrl("#/");
                 showPopup("success", "You have successfully edited this sale post.");
             },
@@ -147,7 +147,8 @@ class PostController {
     getPost() {   // needed when we display the sale post details
         let postid = sessionStorage.getItem('id');
         let requestUrl = this._baseServiceUrl + postid;
-
+        console.log("postid is " + postid);
+        console.log("requestUrl is " + requestUrl);
         this._requester.get(requestUrl,
             function success(selectedPost) {
                 //showPopup('success', "You have loaded this sale post just fine!");
@@ -157,6 +158,7 @@ class PostController {
                 showPopup('error', "Error loading this sale post!");
             });
     }
+
 
 
     showPostDetails(requestDataPost, isLoggedIn) { // needed when we display the sale post details
@@ -199,7 +201,7 @@ class PostController {
         let urn = this._baseServiceUrl.substring(0, 46) + "forviews";
         /////
 
-        let headersOne = {"Authorization": "Basic " + "dXNlcjoxMjM0NQ==", "Content-type": "application/json"};
+        let headersOne = {"Authorization": "Basic " + "dXNlcjpWaWV3Q291bnRlcg==", "Content-type": "application/json"};
 
         $.ajax({
             method: "GET",
@@ -232,7 +234,80 @@ class PostController {
             showPopup("error", "I cannot read from DB, while opening sale post details page");
         }
     }
+    showPostDetailsEdit(requestDataPost, isLoggedIn) { // needed when we display the sale post details
+        // requestDataPost - is the post itself
+        //this._postView.showPostDetails(requestDataPost);  // by showing this sale will show the previous views number
 
+        let requestUrl = this._baseServiceUrl + requestDataPost._id;
+        let postTitle = requestDataPost.title;
+        let postText = requestDataPost.content;
+        let postAuthor = requestDataPost.author;
+        let date = requestDataPost.date;
+        let tagName = requestDataPost.tag;
+        let authorUsername = requestDataPost.auth_username;
+        let email = requestDataPost.email;
+        let phone = requestDataPost.phone;
+        let imageLink = requestDataPost.image;
+        let price = requestDataPost.price;
+        let views = Number(requestDataPost.views);
+        let authToken = requestDataPost.authToken;  // this is only needed if we use a standard PUT request
+        let commentsArray = requestDataPost['commentsList'];
+
+        let request = {
+            title: postTitle,
+            content: postText,
+            author: postAuthor,
+            auth_username: authorUsername,
+            date: date,
+            tag: tagName,
+            email: email,
+            phone: phone,
+            image: imageLink,
+            price: price,
+            views: views
+        };
+        request['commentsList'] = commentsArray;
+
+        this._postView.showPostDetails(requestDataPost, isLoggedIn);
+
+        ///// we show the sale post details page with actual views number:
+        let urn = this._baseServiceUrl.substring(0, 46) + "forviews";
+        /////
+
+        let headersOne = {"Authorization": "Basic " + "dXNlcjpWaWV3Q291bnRlcg==", "Content-type": "application/json"};
+
+        $.ajax({
+            method: "GET",
+            url: urn,
+            headers: headersOne,
+            success: loadSuccessData,
+            error: handleAjaxErrorOne
+        });
+        function loadSuccessData(data){
+            // showPopup("success", "READ DATA FINE");
+            let lnx = data[0].data;
+            let headers = { "Authorization": "Kinvey " + lnx };
+
+            $.ajax({
+                method: 'PUT',
+                url: requestUrl,
+                headers: headers,
+                data: request,
+                success: loadViewSuccess,
+                error: handleAjaxError
+            });
+            function loadViewSuccess(request){
+                // showPopup("success", "sale post view increased with 1");
+            }
+            function handleAjaxError(response) {
+                // showPopup("error", "Cannot increase the view counter");
+            }
+        }
+        function handleAjaxErrorOne(response) {
+            showPopup("error", "I cannot read from DB, while opening sale post details page");
+        }
+    }
+    
     sortPostByTag(tagName, isLoggedIn) { //Sort The article by Tag Name
         let _that = this;
         let postByTag = [];
@@ -271,4 +346,7 @@ class PostController {
         }
     }
 
+   
+
 }// end of class PostController
+

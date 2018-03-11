@@ -93,6 +93,7 @@ class PostView {
                 let postId = data._id;
                 let postAuthor = data.author;
                 let views = data.views;
+                let date = data.date;
                 
                 let authorToken = authToken;  // the authorization token
 
@@ -103,7 +104,7 @@ class PostView {
                     if(tag == "-------"){
                         tag = prevTagValue;
                     }
-                    let date = moment().format("MMMM Do YYYY");
+
                     let data = {
                         "title":  document.getElementById('title').value,
                         "author": postAuthor,
@@ -145,7 +146,8 @@ class PostView {
                 let postId = data._id;
                 let authorUserName = data.auth_username;
                 let views = data.views;
-                
+                let date = data.date;
+
                 let authorToken = authToken;  // the authorization token
 
                 let prevTagValue = data.tag;
@@ -155,7 +157,7 @@ class PostView {
                         tag = prevTagValue;
                     }
                     let authorName = sessionStorage.getItem("fullname");
-                    let date = moment().format("MMMM Do YYYY");
+                    // let date = moment().format("MMMM Do YYYY");
                     let data = {
                         "title":  document.getElementById('title').value,
                         "author": authorName,
@@ -200,6 +202,7 @@ class PostView {
             });
         }
     }
+    
     showSortedPost(data, isLoggedIn) {//Sorts sales posts By Tag Name
         let thisClass = this;
         let tagName = data[0].tag;

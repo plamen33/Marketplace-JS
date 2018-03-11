@@ -83,7 +83,14 @@
     });
 
     onRoute('#/post/:id', function () {   // this is when we open the sale details
-        sessionStorage.setItem('id', this.params['id']);
+        let id = this.params['id'];
+        // this check is needed when we return back when editing a sale
+        if(id.includes("{{")&&id.includes("}}")){
+            id = id.substring(2,id.length-2);
+        }
+        sessionStorage.setItem('id', id);
+        //sessionStorage.setItem('id', this.params['id']);
+        console.log("id is " +  id);
         postController.getPost();
     });
     onRoute('#/create/comment/', function () {
@@ -133,7 +140,7 @@
         // Post a list with all comments/
         postController.showPostDetails(data, authService.isLoggedIn());
     });
-    
+  
 
 
     bindEventHandler('login', function (ev, data) {
