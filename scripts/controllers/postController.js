@@ -46,8 +46,8 @@ class PostController {
         if(postId == ""){
             postId = sessionStorage.getItem('id'); // this is needed when we edit the sale from the sale post details page
         }
-        //console.log(postId);
-         console.log("===>postId:   " + postId);
+       
+       //  console.log("===>postId:   " + postId);
         let requestUrl = this._baseServiceUrl + postId;
         this._requester.get(requestUrl,
             function success(data){
@@ -118,9 +118,9 @@ class PostController {
     }
 
     deletePost(postId) { //Delete the selected sale post row in Kinvey
-        console.log(postId);
+        // console.log(postId);
         if(postId == ""){
-            postId = sessionStorage.getItem('id'); 
+            postId = sessionStorage.getItem('id');
         }
         let requestUrl = this._baseServiceUrl + postId;
 
@@ -131,8 +131,73 @@ class PostController {
             headers: headers
         };
         //console.log(requestData);
+        let serviceUrl = this._baseServiceUrl;
+        let servUrl = this._baseServiceUrl;
+        let requester = this._requester;
         this._requester.delete(requestUrl, requestData,
             function success(response) {
+               
+                //// deleting all of the post comments
+                serviceUrl = serviceUrl.substring(0, serviceUrl.length-6) + "comments/";
+                // console.log(serviceUrl);
+
+                requester.get(serviceUrl,
+                    function success(data) {
+                       // console.log(data);
+
+                        for (let comment of data) {
+                            if (comment.postid == postId)  {
+                                // console.log(comment);
+                                let sUrl = serviceUrl + comment._id;
+                                ///// we show the sale post details page with actual views number:
+                                let urn =servUrl.substring(0, 46) + "forviews";
+                                /////
+
+                                let headersOne = {"Authorization": "Basic " + "dXNlcjpWaWV3Q291bnRlcg==", "Content-type": "application/json"};
+
+                                $.ajax({
+                                    method: "GET",
+                                    url: urn,
+                                    headers: headersOne,
+                                    success: loadSuccessData,
+                                    error: handleAjaxErrorOne
+                                });
+                                function loadSuccessData(data){
+                                    showPopup("success", "READ DATA FINE");
+                                    let lnx = data[0].data;
+                                    // console.log(lnx);
+                                    // let lnx = "b6fa458b-b053-40b5-ac81-c0961549a9b3.94r4l2h3jkM/SybhTwM3O1piOvMlhMyTeBjvxu+bLeU=";
+                                    let headers = { "Authorization": "Kinvey " + lnx };
+
+                                    $.ajax({
+                                        method: 'DELETE',
+                                        url: sUrl,
+                                        headers: headers,
+                                        data: comment,
+                                        success: loadViewSuccess,
+                                        error: handleAjaxError
+                                    });
+                                    function loadViewSuccess(request){
+                                        console.log("deleted successfully comment with id: " + comment._id);
+                                        // showPopup("success", "sale post view increased with 1");
+                                    }
+                                    function handleAjaxError(response) {
+                                        console.log("error while deleting a comment");
+                                        // showPopup("error", "Cannot increase the view counter");
+                                    }
+                                }
+                                function handleAjaxErrorOne(response) {
+                                    showPopup("error", "I cannot read from DB while trying to get admin rights in order to delete comments from a deleted post.");
+                                }
+                            }
+                        }
+                        
+                    },
+
+                    function error(data) {
+                        showPopup('error', "Error");
+                    });
+
                 showPopup("success", "You have successfully deleted this sale");
                 redirectUrl("#/home")
             },
@@ -140,6 +205,7 @@ class PostController {
                 showPopup("error", "You don't have authorization to delete this sale post !");
             });
     }
+
     goHome(){
         redirectUrl("#/")
     }
@@ -147,8 +213,8 @@ class PostController {
     getPost() {   // needed when we display the sale post details
         let postid = sessionStorage.getItem('id');
         let requestUrl = this._baseServiceUrl + postid;
-        console.log("postid is " + postid);
-        console.log("requestUrl is " + requestUrl);
+        // console.log("postid is " + postid);
+        // console.log("requestUrl is " + requestUrl);
         this._requester.get(requestUrl,
             function success(selectedPost) {
                 //showPopup('success', "You have loaded this sale post just fine!");
@@ -336,7 +402,6 @@ class PostController {
     }
 
     validateEmail(email) {
-
         let filter = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
         // more simple email validation: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
         if (!filter.test(email)) {
@@ -345,8 +410,7 @@ class PostController {
             return true;
         }
     }
-
-   
+    
 
 }// end of class PostController
 

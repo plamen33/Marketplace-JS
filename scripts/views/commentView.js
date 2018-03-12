@@ -5,7 +5,6 @@ class CommentView {
     }
 
     showCreateCommentPage(isLoggedIn) {
-        // console.log(postId);
         // if(postId == ""){
         //     postId = sessionStorage.getItem('id'); // this is needed when we edit the sale from the sale post details page
         // }

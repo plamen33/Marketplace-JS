@@ -407,7 +407,8 @@ footer {
 
 /* post-details in details-post.html*/
 .post-details {
-    background: #e5fce3;
+    /*background: #e5fce3;*/
+    background: transparent;
     width: 93%;
     margin: 33px 33px 50px 33px;
     padding: 21px 1px 21px 21px;

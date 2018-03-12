@@ -117,30 +117,5 @@ class CommentController {
                 showPopup('error', "Error");
             });
     }
-      deleteCommentAfterPost(commentId) { //Delete the selected sale post row in Kinvey
-
-      if(commentId == ""){
-          commentId = sessionStorage.getItem('id');
-      }
-      let requestUrl = this._baseServiceUrl + commentId;
-
-      let headers = {};
-      headers['Authorization'] = "Kinvey " + sessionStorage.getItem('_authToken');
-      headers['Content-Type'] = "application/json";
-      let requestData = {
-          headers: headers
-      };
-
-      this._requester.delete(requestUrl, requestData,
-          function success(response) {
-              console.log("deleted successfully comment with id: "+commentId)
-              //showPopup("success", "You have successfully deleted this comment");
-              //redirectUrl("#")
-          },
-          function error(response) {
-              console.log("cannot delete comment with id: "+commentId)
-             // showPopup("error", "You don't have authorization to delete this sale comment !");
-          });
-     }
-
+     
 }
