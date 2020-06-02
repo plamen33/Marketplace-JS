@@ -171,11 +171,6 @@ class PostController {
     // we are redirected here from app.js:
     deletePost(postId, postAuthor) { //Delete the selected sale post row in Kinvey
 
-        // TODO : // consider project deployment to Github with what we have, make backups, continue development in Github folder
-        // clear unwanted debug comments, clear code, put error message for EDIT,
-        // fix Edit
-        // last fix EDIT for author and admin
-
         let loggedUserUsername = sessionStorage.getItem('username');
         // console.log(postAuthor);
         // console.log(loggedUserUsername);
