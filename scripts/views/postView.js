@@ -18,8 +18,8 @@ class PostView {
             $.get('templates/create-post.html', function (template) {
                 var renderedContent = Mustache.render(template, null);
                 $(_that._mainContentSelector).html(renderedContent);
-                // set the author element to the current user’s username, which for Firebase is the email
-                $('#author').val(user.username);
+                // set the author element to the current user’s full name
+                $('#author').val(user.fullname);
          
                 $('#create-new-post-request-button').on('click', function (ev) {
                     // when clicked - we first extract the title, author, content, etc. of the current sale post
@@ -30,13 +30,10 @@ class PostView {
                     let phone = $('#phone').val();
                     let image = $('#image').val();
                     // we use Moment JS to extract the current date, the moment at which the post was created
-                    let date = moment().format("MMMM Do YYYY HH:mm:ss");
+                    let date = moment().format("MMMM Do YYYY");
                     let tag = $('#tag').val();
                     let price = $('#price').val();
                     let views = 0;
-                    let postId = 0;
-                    let lastCommentId = 0;
-                    let commentsArray = ['0'];
 
                     // Then we create a data object to hold the necessary things for our post, and we trigger an event “createPost” and pass the object with it
                     let data = {
@@ -44,19 +41,15 @@ class PostView {
                         author: author,
                         content: content,
                         date: date,
-                        creation_date: new Date(),
                         tag: tag,
                         email: email,
                         phone: phone,
                         image: image,
                         price: price,
                         views: views,
-                        comments: commentsArray,
-                        auth_username: user.username,
-                        last_comment_id: lastCommentId,
-                        postId: postId
+                        auth_username: user.username
                     };
-                    // triggerEvent triggers createPost method in PostController:
+
                     triggerEvent('createPost', data);
                 });
             });
@@ -192,24 +185,10 @@ class PostView {
     }
     showPostDetails(post, isLoggedIn) { //Show the article which we want to see (incl. all comments)
         let thisClass = this;
-        let testArray = post.comments;
-        let postData = null;
-
-        // do this check, we will enter here when post is just created and there are no comments, or when the last comment was deleted:
-        // this will mask the zero 0 comment, which is present in order for Firebase not to delete comments record inside the post object under posts
-        // the zero comment is post.comments = ['0']
-        if(testArray.length == 1 && testArray[0] == "0"){
-            postData = {
-                postDetails: post  // this what we pass to the view
-            };
-        } else{
-            // if there is one comment, which is real or more - show the comments:
-            postData = {
-                postDetails: post,  // this what we pass to the view
-                postComments: post.comments.reverse()   // future implementation
-            };
-        }
-
+        let postData = {
+            postDetails: post,  // this what we pass to the view
+            postComments: post['commentsList']   // future implementation
+        };
 
         if(isLoggedIn){
             $.get('templates/details-post.html', function (template) {
@@ -229,8 +208,8 @@ class PostView {
         let tagName = data[0].tag;
         let tagArray = [];
         tagArray[0] = { "tagN":tagName};
-        //console.log(tagArray);
-        //console.log(tagName);
+        console.log(tagArray);
+        console.log(tagName);
         let postsData = {
             sortedPosts: data,  // sortedPosts is used in the postsByTagName.html
             nameOfTag: tagArray
