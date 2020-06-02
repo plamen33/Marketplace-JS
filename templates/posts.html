@@ -1,0 +1,32 @@
+{{#blogPosts}}
+<li class="single-post">
+    <article id="post-{{postId}}">
+        <!--we have to clear the float:left actions left from the 2 divs in the end of the article tag:-->
+        <p style="clear: left; "><small></small></p>
+
+        <div class="dot">&nbsp;</div>
+        <h3 class="title"><a href="#/post/{{postId}}" class="links-header">{{title}}</a></h3>
+        <!--<h3 class="title">{{title}}</h3>-->
+        <p class="subtitle">Created on {{date}} by {{author}}</p>
+        <!--<p class="content">{{content}}</p>-->
+        <textarea class="content-display-posts" disabled>{{content}}</textarea>
+        <!--<a href="#/posts/edit/?id={{_id}}" class="links">Edit Post</a>-->
+        <!--<a href="#/edit/post/?id={{_id}}" class="tealbtn"  style="margin-left: 3%;">Edit Sale Post</a>-->
+        <!--<a href="#/post/{{_id}}" class="tealbtn1"  style="margin-left: 3%;">Details</a>-->
+        <br>
+        <div class="tag">
+            <span style="font-weight:bold">Tag:&nbsp;  </span>
+            <a href="#/tag/?tag={{tag}}" class="tagbtn">{{tag}}</a>
+        </div>
+        <!--<div style="float:left; margin-left: 3%; margin-right: 10px">-->
+            <!--<a href="#/edit/post/?id={{_id}}" class="tealbtn" >Edit Sale</a>-->
+        <!--</div>-->
+        <div style="float:left; margin-left: 3%; margin-right: 10px">
+            <a href="#/post/{{postId}}" class="tealbtn1" >Details</a>
+        </div>
+    </article>
+</li>
+<br /> <br /> <br />
+{{/blogPosts}}
+
+

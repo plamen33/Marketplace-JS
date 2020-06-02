@@ -1,0 +1,67 @@
+<!--postDetails is set in the postView.js-->
+{{#postDetails}}
+<div class="post-details">
+    <article id="post">
+        <h3 class="title">{{title}}</h3>
+        <p class="subtitle">Created on {{date}} by {{author}}</p>
+        <!--<p class="content">{{content}}</p>-->
+        <textarea class="content-display"  title="Use mouse wheel to scroll down the whole text." disabled>{{content}}</textarea>
+    </article>
+    <img class="image" src="{{image}}" style="border-radius: 10px" alt=" " width="400" height="300">
+    <br>  <br>
+    <ul class="border">
+        <li><b>Phone:</b> {{phone}}</li>
+        <li>Email:</b> {{email}}</li>
+        <li>Tag</b>: {{tag}}</li>
+        <li>Price</b>: {{price}}</li>
+    </ul>
+    <br><br>
+    <div style="float:left; margin-left: 10%; ">
+        <a href="#/edit/post/?id={{_id}}" class="actionbtn2">Edit Sale</a>
+    </div>
+    <div style="float:left; margin-left: 1%; margin-right: 2px">
+        <a href="#/home"  class="cancelbtn2">Home</a>
+    </div>
+    <div style="float:left; margin-left: 1%; margin-right: 2px">
+        <a href="#/create/comment/?id={{_id}}"  class="commentbtn2">Comment</a>
+    </div>
+    <div style="float:left; margin-left: 1%;">
+        <a href="#/delete/post/?id={{postId}}&author={{author}}"  onclick="return confirm('Are you sure you want to delete this sale ?')" class="deletebtn2">Delete</a>
+    </div>
+    <br>
+    <article style="padding: 30px ">
+    </article>
+    <h4 align="center">This sale was viewed <span class="label teal">{{views}}</span> times.</h4>
+
+</div>
+
+
+<p align="left" style="margin-left: 5%; margin-right: 2px; margin-bottom: 7px; color: #468847; font-weight: bold; font-size: 21px">Comments: </p>
+
+
+{{#postComments}}
+<div style="padding-left: 17px">
+    <blockquote class="blockquote">
+        <p  style="font-weight: bold; margin-left: 17px; margin-bottom: 7px">{{comment_author}}</p>
+        <p  style="color: #919873; margin-left: 37px; margin-bottom: 12px; font-size: 14px">{{comment_date}}</p>
+        <p style="color: #41649c; margin-left: 17px;  margin-bottom: 3px;">"{{comment_content}}" </p>
+
+        <!--<div style="float:left; margin-left: 3%; margin-right: 10px">-->
+            <!--<a href="#/delete/comment/?id={{_id}}"  class="deletebtn3">Delete</a>-->
+        <!--</div>-->
+
+        <!-- here we pass to app.js the comment_id and the postId, which we will need for the delete call -->
+        <p style="margin-left: 210px"><a href="#/delete/comment/?id={{comment_id}}&postId={{postId}}&commentAuthor={{comment_author}}"  class="deletebtn3">Delete</a></p>
+
+    </blockquote>
+</div>
+<br>
+{{/postComments}}
+
+{{/postDetails}}
+<!--<div>-->
+    <!--<blockquote><b>Phone:</b> {{phone}}</blockquote>-->
+    <!--<b>Email:</b> {{email}}<br>-->
+    <!--<b>Tag</b>: {{tag}}<br>-->
+<!--</div>-->
+<!--<br>-->
