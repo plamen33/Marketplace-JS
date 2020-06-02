@@ -4,22 +4,16 @@ class CommentView {
         this._mainContentSelector = mainContentSelector;
     }
 
-    showCreateCommentPage(isLoggedIn) {
-        // if(postId == ""){
-        //     postId = sessionStorage.getItem('id'); // this is needed when we edit the sale from the sale post details page
-        // }
-        // console.log("postId is : " + postId);
-        console.log(sessionStorage.getItem('id'));
-        let test = sessionStorage.getItem('id');
-        console.log(test);
-
+    showCreateCommentPage(isLoggedIn, lastCommentId) {
+        console.log("last Comment ID is : " + lastCommentId)
+        
         let thisClass = this;
 
         $.get('templates/form-create-comment.html', function (template) {
             var renderMainContent = Mustache.render(template, null);
             $(thisClass._mainContentSelector).html(renderMainContent);
 
-            $('#commentAuthor').val(sessionStorage.getItem('fullname'));
+            $('#commentAuthor').val(sessionStorage.getItem('username'));
             console.log("enter form-create-comment.htm");
             $('#create-new-comment-request-button').on('click', function (ev) {
                 if (isLoggedIn != true) {
@@ -30,11 +24,14 @@ class CommentView {
                     let commentAuthor = $('#commentAuthor').val();
                     let commentContent = $('#commentContent').val();
                     let date = moment().format("MMMM Do YYYY, h:mm A");
+                    // this will be the new comment created object, temporary we load the postid inside it, as it will be needed later
                     let data = {
-                        author: commentAuthor,
-                        content: commentContent,
-                        date: date,
+                        comment_id: lastCommentId,
+                        comment_author: commentAuthor,
+                        comment_content: commentContent,
+                        comment_date: date,
                         postid: sessionStorage.getItem('id')
+                        //commentId : lastCommentId
                     };
                     triggerEvent('createComment', data);
                 }

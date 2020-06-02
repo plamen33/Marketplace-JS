@@ -1,4 +1,5 @@
 // this is a custom self-made framework
+// this is the old Kinvey requestor - it is not used now:
 class Requester {
     constructor(authorizationService) {
         this.authorizationService = authorizationService;
@@ -56,6 +57,7 @@ class Requester {
 let _guestCredentials;
 let _appCredentials;
 
+// old Kinvey Authorization service - not used now:
 class AuthorizationService {
     constructor(baseServiceUrl, appId, appSecret, guestUserCredentials) {
         this.baseServiceUrl = baseServiceUrl;
@@ -100,13 +102,82 @@ class AuthorizationService {
     }
 }
 
+// Firebase Authorization service:
+class AuthorizationServiceFirebase {
+    constructor(baseServiceUrl, usln, usps) {
+        this.baseServiceUrl = baseServiceUrl;
+        this.usln = usln;
+        this.usps = usps;
+    }
+
+    getCurrentUser() {
+        return sessionStorage['username'];
+    }
+
+    isLoggedIn() {
+        return this.getCurrentUser() != undefined;
+    }
+}
+// Firebase Requester:
+class RequesterFirebase {
+    constructor(authorizationServiceFirebase) {
+        this.authorizationServiceFirebase = authorizationServiceFirebase;
+    }
+    //2 and 3 are two functions
+    get(url, successCallback, errorCallback) {
+        this._makeRequest('GET', url, null, successCallback, errorCallback);
+    }
+
+    post(url, data, successCallback, errorCallback) {
+        this._makeRequest('POST', url, data, successCallback, errorCallback);
+    }
+
+    put(url, data, successCallback, errorCallback) {
+        this._makeRequest('PUT', url, data, successCallback, errorCallback);
+    }
+    // patch is similar to 'PUT', but it updates data in DB only partially, not all the data, but the one we specify in the data variable
+    patch(url, data, successCallback, errorCallback) {
+        this._makeRequest('PATCH', url, data, successCallback, errorCallback);
+    }
+
+    delete(url, data, successCallback, errorCallback) {
+        this._makeRequest('DELETE', url, data, successCallback, errorCallback);
+    }
+    // this method makes the query to the database
+    _makeRequest(method, url, data, successCallBack, errorCallBack) {
+        $.ajax({
+            method: method,
+            url: url,
+            data: JSON.stringify(data) || null,
+            beforeSend: function () {
+                if ($("#loader-modal").length) {   // this is the loader gif like visualisation
+                    $("#loader-modal").css("display", "block");
+                    $(".wrapper").css("display", "none");
+                }
+            },
+            success: successCallBack,
+            error: errorCallBack,
+            complete: function () {
+                if ($("#loader-modal").length) {
+                    $("#loader-modal").css("display", "none");
+                    $(".wrapper").css("display", "inline-block");
+                }
+            }
+        });
+    }
+}
+
+
 // this function shows the pop up windows
 function showPopup(type, text, position) {
 
     function _showSuccessPopup(text, position) {
+        if(position == null || position == ""){
+            position = 3000;
+        }
         noty({
             text: text,
-            timeout: 2000,
+            timeout: position,
             layout: 'top',
             type: 'success'
         });
@@ -131,9 +202,12 @@ function showPopup(type, text, position) {
     }
 
     function _showErrorPopup(text, position) {
+        if(position == null || position == ""){
+            position = 3000;
+        }
         noty({
             text: text,
-            timeout: 2000,
+            timeout: position,
             layout: 'top',
             type: 'error'
         });

@@ -1,5 +1,21 @@
 (function () {
 
+    // Firebase initialization:
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+        apiKey: "AIzaSyAZtJrHNVVA4D5YKnBZ2UH-oWZJQkmqP-s",
+        authDomain: "marketplace-c21f5.firebaseapp.com",
+        databaseURL: "https://marketplace-c21f5.firebaseio.com",
+        projectId: "marketplace-c21f5",
+        storageBucket: "marketplace-c21f5.appspot.com",
+        messagingSenderId: "173412071754",
+        appId: "1:173412071754:web:412409d17d0efb7b0ea9b3"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    let usln = "read@read.com";
+    let usps = "readget";
+    
     // Create your own kinvey application
 
     let baseUrl = "https://baas.kinvey.com"; 
@@ -18,31 +34,46 @@
     //Requester constructor accepts an AuthorizationService as a parameter, because the requester needs one, in order to generate its request’s headers:
     let requester = new Requester(authService);
 
+    // DEBUG: test link for scenario when there is no Firebase connection due to some reason:
+    // const firebaseBaseUrl = 'http://nodatabase.connection.com/';
+
+    const firebaseBaseUrl = 'https://marketplace-c21f5.firebaseio.com/';
+    const postsFireBaseUrl = firebaseBaseUrl + 'posts';
+
+
+    let authServiceFirebase = new AuthorizationServiceFirebase(firebaseBaseUrl, usln, usps);
+    let requesterFirebase = new RequesterFirebase(authServiceFirebase);
+
     // define 2 selectors as preparatory actions, they are hardcoded, used in the views in the constructors
     let selector = ".wrapper"; // usage in index.html
     let mainContentSelector = ".main-content"; // usage in welcome-user.html, welcome-guest.html, form-guest.html, form-user.html
 
+    console.log("DEBUG: initial step enter 0");
+    
     // Create HomeView, HomeController, UserView, UserController, PostView and PostController
     let homeView = new HomeView(selector, mainContentSelector);
-    let homeController = new HomeController(homeView, requester, baseUrl, appKey);
+    let homeController = new HomeController(homeView, requesterFirebase, postsFireBaseUrl, appKey);
 
+    // to be revised, more work here is needed:
     let userView = new UserView(selector, mainContentSelector);
-    let userController = new UserController(userView, requester, baseUrl, appKey);
+    let userController = new UserController(userView, requesterFirebase, firebaseBaseUrl, appKey);
 
     let postView = new PostView(selector, mainContentSelector);
-    let postController = new PostController(postView, requester, baseUrl, appKey);
+    let postController = new PostController(postView, requesterFirebase, firebaseBaseUrl, appKey);
 
     let commentView = new CommentView(selector,mainContentSelector);
-    let commentController = new CommentController(commentView, requester, baseUrl, appKey);
+    let commentController = new CommentController(commentView, requesterFirebase, firebaseBaseUrl, appKey);
 
     let chartView = new ChartView(selector,mainContentSelector);
-    let chartController = new ChartController(chartView, requester, baseUrl, appKey);
+    let chartController = new ChartController(chartView, requesterFirebase, firebaseBaseUrl, appKey);
     
     initEventServices();
     // onRoute function is provided by the framework
+
     onRoute("#/", function () {
+        console.log("app.js enter main route");
         // Check if user is logged in and if its not show the guest page, otherwise show the user page...
-        if(authService.isLoggedIn()){
+        if(authServiceFirebase.isLoggedIn()){
             homeController.showUserPage();
         } else{
             homeController.showGuestPage();
@@ -77,8 +108,8 @@
         // we create an object that will store the user username and user fullname:
         let loggedUser = {
             username: sessionStorage['username'],
-            fullname: sessionStorage['fullname']
-        }
+            //fullname: sessionStorage['fullname']  // not available for the moment for Firebase
+        };
         postController.showCreatePostPage(loggedUser, authService.isLoggedIn());
     });
 
@@ -95,21 +126,27 @@
     });
     onRoute('#/create/comment/', function () {
         commentController.showCreateCommentPage(authService.isLoggedIn());
-
         //sessionStorage.setItem('id', postId.params['id']);
     });
 
     onRoute("#/edit/post/", function (postId) {
-        console.log("psot ID: "+postId.params._id);
+        console.log("post ID: "+postId.params._id);
         console.log(postId);
         postController.editPostPage(postId.params['id']);
     });
-    onRoute('#/delete/post/', function (postId) {
-        postController.deletePost(postId.params['id']);
+    onRoute('#/delete/post/', function (postData) {
+        // console.log(postIdData.params['id']);
+        // not sure why we set here id, but it works this way:
+        postController.deletePost(postData.params['id'], postData.params['author']);
     });
-    onRoute('#/delete/comment/', function (commentId) {
-        // console.log(this.params['id']);
-        commentController.deleteComment(commentId.params['id']);
+    onRoute('#/delete/comment/', function (data) {
+        // we can extract the ids also using this.params, as below:
+        // console.log("comment ID: " + this.params['id']);
+        // console.log("post ID is : " + this.params['postId']);
+
+        // data contains the comment ID, which is id  and the postId which is postId:   and commentAuthor which is comment_author
+        //                        this is the comment id   this is the postId     this is the comment author:
+        commentController.deleteComment(data.params['id'], data.params['postId'], data.params['commentAuthor']);
     });
     onRoute('#/tag/', function (data) {
         let tagName = data.params.tag;
@@ -122,7 +159,6 @@
 
     });
     onRoute('#/salesChart', function () {
-        
         chartController.showCreateChart(authService.isLoggedIn());
     });
 
@@ -140,8 +176,6 @@
         // Post a list with all comments/
         postController.showPostDetails(data, authService.isLoggedIn());
     });
-  
-
 
     bindEventHandler('login', function (ev, data) {
         // Login the user...

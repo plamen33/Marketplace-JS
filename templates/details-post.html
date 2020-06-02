@@ -26,7 +26,7 @@
         <a href="#/create/comment/?id={{_id}}"  class="commentbtn2">Comment</a>
     </div>
     <div style="float:left; margin-left: 1%;">
-        <a href="#/delete/post/?id={{_id}}"  onclick="return confirm('Are you sure you want to delete this sale ?')" class="deletebtn2">Delete</a>
+        <a href="#/delete/post/?id={{postId}}&author={{author}}"  onclick="return confirm('Are you sure you want to delete this sale ?')" class="deletebtn2">Delete</a>
     </div>
     <br>
     <article style="padding: 30px ">
@@ -34,7 +34,7 @@
     <h4 align="center">This sale was viewed <span class="label teal">{{views}}</span> times.</h4>
 
 </div>
-{{/postDetails}}
+
 
 <p align="left" style="margin-left: 5%; margin-right: 2px; margin-bottom: 7px; color: #468847; font-weight: bold; font-size: 21px">Comments: </p>
 
@@ -42,20 +42,23 @@
 {{#postComments}}
 <div style="padding-left: 17px">
     <blockquote class="blockquote">
-        <p  style="font-weight: bold; margin-left: 17px; margin-bottom: 7px">{{author}}</p>
-        <p  style="color: #919873; margin-left: 37px; margin-bottom: 12px; font-size: 14px">{{date}}</p>
-        <p style="color: #41649c; margin-left: 17px;  margin-bottom: 3px;">"{{content}}" </p>
+        <p  style="font-weight: bold; margin-left: 17px; margin-bottom: 7px">{{comment_author}}</p>
+        <p  style="color: #919873; margin-left: 37px; margin-bottom: 12px; font-size: 14px">{{comment_date}}</p>
+        <p style="color: #41649c; margin-left: 17px;  margin-bottom: 3px;">"{{comment_content}}" </p>
 
         <!--<div style="float:left; margin-left: 3%; margin-right: 10px">-->
             <!--<a href="#/delete/comment/?id={{_id}}"  class="deletebtn3">Delete</a>-->
         <!--</div>-->
-        <p style="margin-left: 210px"><a href="#/delete/comment/?id={{_id}}"  class="deletebtn3">Delete</a></p>
+
+        <!-- here we pass to app.js the comment_id and the postId, which we will need for the delete call -->
+        <p style="margin-left: 210px"><a href="#/delete/comment/?id={{comment_id}}&postId={{postId}}&commentAuthor={{comment_author}}"  class="deletebtn3">Delete</a></p>
 
     </blockquote>
 </div>
 <br>
 {{/postComments}}
 
+{{/postDetails}}
 <!--<div>-->
     <!--<blockquote><b>Phone:</b> {{phone}}</blockquote>-->
     <!--<b>Email:</b> {{email}}<br>-->
