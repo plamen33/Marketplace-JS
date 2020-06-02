@@ -107,7 +107,7 @@
     onRoute('#/posts/create', function () {
         // we create an object that will store the user username and user fullname:
         let loggedUser = {
-            username: sessionStorage['username'],
+            username: sessionStorage['username']
             //fullname: sessionStorage['fullname']  // not available for the moment for Firebase
         };
         postController.showCreatePostPage(loggedUser, authService.isLoggedIn());
@@ -130,7 +130,7 @@
     });
 
     onRoute("#/edit/post/", function (postId) {
-        console.log("post ID: "+postId.params._id);
+        console.log("post ID: " + postId.params.id);
         console.log(postId);
         postController.editPostPage(postId.params['id']);
     });

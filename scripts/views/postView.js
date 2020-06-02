@@ -83,7 +83,7 @@ class PostView {
         //     $(thisClass._wrapperSelector).html(navSelector);
         // });
         //console.log(authToken);
-        if(loggedUser == "admin"){
+        if(loggedUser == "admin@admin.com"){
             //console.log(loggedUser);
             $.get('templates/edit-post.html', function (template) {
 
@@ -97,11 +97,11 @@ class PostView {
                 document.getElementById('image').value = data.image;
                 document.getElementById('price').value = data.price;
                 let authorUserName = data.auth_username;
-                let postId = data._id;
+                let postId = data.postId;
                 let postAuthor = data.author;
                 let views = data.views;
                 let date = data.date;
-                
+                console.log(postAuthor);
                 let authorToken = authToken;  // the authorization token
 
                 let prevTagValue = data.tag;
@@ -117,7 +117,7 @@ class PostView {
                         "author": postAuthor,
                         "content": document.getElementById('content').value,
                         "date": date,
-                        "_id": postId,
+                        "postId": postId,
                         "tag": tag,
                         "email": document.getElementById('email').value,
                         "phone": document.getElementById('phone').value,
@@ -143,14 +143,15 @@ class PostView {
 
                 var renderMainContent = Mustache.render(template, null);
                 $(thisClass._mainContentSelector).html(renderMainContent);
-                $('#author').val(sessionStorage.getItem('fullname'));
+                $('#author').val(data.author);
+                //document.getElementById('author').value = data.author;
                 document.getElementById('content').value = data.content;
                 document.getElementById('title').value = data.title;
                 document.getElementById('email').value = data.email;
                 document.getElementById('phone').value = data.phone;
                 document.getElementById('image').value = data.image;
                 document.getElementById('price').value = data.price;
-                let postId = data._id;
+                let postId = data.postId;
                 let authorUserName = data.auth_username;
                 let views = data.views;
                 let date = data.date;
@@ -158,19 +159,21 @@ class PostView {
                 let authorToken = authToken;  // the authorization token
 
                 let prevTagValue = data.tag;
+                let authorName = data.author;
+
                 $('#edit-post-request-button').on('click', function (ev) {
                     let tag = $('#tag').val();
                     if(tag == "-------"){
                         tag = prevTagValue;
                     }
-                    let authorName = sessionStorage.getItem("fullname");
+
                     // let date = moment().format("MMMM Do YYYY");
                     let data = {
                         "title":  document.getElementById('title').value,
                         "author": authorName,
                         "content": document.getElementById('content').value,
                         "date": date,
-                        "_id": postId,
+                        "postId": postId,
                         "tag": tag,
                         "email": document.getElementById('email').value,
                         "phone": document.getElementById('phone').value,

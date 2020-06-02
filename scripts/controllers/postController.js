@@ -91,13 +91,14 @@ class PostController {
     editPostPage(postId){ // Download (get) the article from Kinvey
         let thisClass = this;
 
-        if(postId == ""){
-            postId = sessionStorage.getItem('id'); // this is needed when we edit the sale from the sale post details page
-        }
-       
-       //  console.log("===>postId:   " + postId);
+        // if(postId == ""){
+        //     postId = sessionStorage.getItem('id'); // this is needed when we edit the sale from the sale post details page
+        // }
+        
+        let token = sessionStorage.getItem('_authToken');
+        let editRequestUrl = this._baseServiceUrl + "posts/"+ postId +".json?auth=" + token;
         let requestUrl = this._baseServiceUrl + postId;
-        this._requester.get(requestUrl,
+        this._requester.get(editRequestUrl,
             function success(data){
                 // showPopup('info', "You have successfully loaded the selected post!");
                 thisClass._postView.showEditPostPage(data);
@@ -125,9 +126,8 @@ class PostController {
             return;
         }
 
-
-        let requestUrl = this._baseServiceUrl + requestData._id;
-        
+        let requestUrl = this._baseServiceUrl + "posts/"+ requestData.postId +".json?auth=" + requestData.authToken;
+        console.log(requestUrl);
         let postTitle = requestData.title;
         let postText = requestData.content;
         let postAuthor = requestData.author;
@@ -140,6 +140,7 @@ class PostController {
         let price = requestData.price;
         let views = requestData.views;
         let authToken = requestData.authToken;  // this is only needed if we use a standard PUT request
+        let postId = requestData.postId;
 
         let request = {
             title: postTitle,
@@ -152,10 +153,11 @@ class PostController {
             image: imageLink,
             price: price,
             views: views,
-            auth_username: authorUsername
+            auth_username: authorUsername,
+            postId: postId
         };
-        let id = requestData._id;
-        this._requester.put(requestUrl, request,
+        let id = requestData.postId;
+        this._requester.patch(requestUrl, request,
             function success() {
                 redirectUrl("#/post/{{"+ id +"}}");
                 //redirectUrl("#/");
@@ -195,8 +197,8 @@ class PostController {
                     showPopup("success", "You have successfully deleted this post sale");
                     requester.get(getPostsRequestUrl,
                         function success(posts) {
-                            showPopup("success", "You have successfully get posts");
-                            //console.log(posts);
+                            //showPopup("success", "You have successfully get posts");
+                            console.log("You have successfully get posts");
                             //this will be the new posts array:
                             let newPostArray = [];
                             // this variable will contain the modified post array and the last_comment_id inside the sale post record in Firebase
@@ -240,7 +242,8 @@ class PostController {
                             // with new indexes array we created:
                             requester.put(getPostsRequestUrl, newPostArray,
                                 function success(data) {  // data parameter is the current user
-                                    showPopup("success", "You have successfully deleted the sale");
+                                    //showPopup("success", "You have successfully deleted the sale");
+                                    console.log("You have successfully updated all posts with correct indexes");
                                     redirectUrl("#/home")
                                 },
                                 function error(data) {

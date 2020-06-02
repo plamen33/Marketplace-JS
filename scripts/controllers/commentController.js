@@ -82,7 +82,8 @@ class CommentController {
                     console.log(lastCommentIdData);
                     internalRequester.patch(requestUrlToUpdateLastCommentId, lastCommentIdData,
                         function success(data) {  // data parameter is the current user
-                            showPopup('success', "You have successfully Updated last_COMMENT ID.");
+                            //showPopup('success', "You have successfully Updated last_COMMENT ID.");
+                            console.log("You have successfully Updated last_COMMENT ID");
                         },
                         function error(data) {
                             showPopup('error', "An error has occurred while attempting to update last comment ID in DB.");
