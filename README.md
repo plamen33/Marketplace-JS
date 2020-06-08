@@ -1,6 +1,8 @@
 # Marketplace-JS
 Marketplace JavaScript web project
 
+Project was migrated to Firebase DB.
+
 **Frameworks:  Sammy.js, Mustache.js, Moment.js, jQuery.js, Framework.js, Chart.js**
 
 **Database:  Firebase (previous: Kinvey)**
