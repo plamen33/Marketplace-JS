@@ -41,7 +41,7 @@ class PostController {
                 //console.log(Object.entries(data));
                 let tempArray = Object.entries(data);
                 let dataArray = [];
-                for (let i = 0; i < tempArray.length && i < 7; i++) { // The recent post sales array basically holds the 7 most recent posts, if there are that much
+                for (let i = 0; i < tempArray.length; i++) {
                     dataArray[i] = tempArray[i][0];
                 }
                 //console.log(dataArray);
